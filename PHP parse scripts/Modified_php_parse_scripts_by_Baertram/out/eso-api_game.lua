@@ -25,7 +25,7 @@ function CallSecureProtected(functionName, ...) end
 --- @return boolean isTrusted
 function IsTrustedFunction(func) end
 
---- @param guiName string
+--- @param guiName string|nil
 --- @return void
 function ReloadUI(guiName) end
 

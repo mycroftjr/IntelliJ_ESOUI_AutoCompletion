@@ -1,3 +1,5 @@
+---@alias integer number
+
 --Compatibility aliases and constants
 ITEMSTYLE_NONE                      = 0
 ITEMSTYLE_RACIAL_BRETON             = 1
@@ -165,7 +167,7 @@ function EVENT_MANAGER:RegisterForUpdate(namespace, interval, callback) end
 function EVENT_MANAGER:UnregisterForUpdate(namespace) end
 
 -------------------------------------------------------------------------------
---- @class Animation Manager
+--- @type AnimationManager
 ANIMATION_MANAGER = {}
 
 --- @return AnimationManager animationManager
@@ -173,13 +175,13 @@ function GetAnimationManager() end
 
 --- @param self AnimationManager
 --- @param timelineName string
---- @param animatedControl object
---- @return object timeline
+--- @param animatedControl Control
+--- @return AnimationTimeline timeline
 function ANIMATION_MANAGER:CreateTimelineFromVirtual(timelineName, animatedControl) end
 
 -------------------------------------------------------------------------------
---- @class Addon Manager
---ADDON_MANAGER = {}
+--- @class AddonManager
+ADDON_MANAGER = {}
 
 --- @return AddOnManager addOnManager
 function GetAddOnManager() end
@@ -206,7 +208,7 @@ function ZO_ChatSystem_ShouldUseKeyboardChatSystem() end
 function ZO_ChatSystem_GetChannelInfo() end
 function ZO_ChatSystem_GetChannelSwitchLookupTable() end
 function ZO_ChatSystem_GetCategoryColorFromChannel(channelId) end
---- @return table<EventCode, table<ChannelType, ChatChannelCategories>>, table<EventCode, ChatCategory>
+--- @return table<Event, table<ChannelType, ChatChannelCategories>>, table<Event, ChatCategory>
 function ZO_ChatSystem_GetEventCategoryMappings() end
 function ZO_ChatSystem_GetTrialEventMappings() end
 function StartChatInput(chatText, CHAT_CHANNEL_CONSTANT, targetName) end
@@ -968,8 +970,8 @@ function zo_strmatch         (subject, pattern) end -- string.match
 function zo_strgmatch        (subject, pattern) end -- string.gmatch
 function zo_strfind          (subject, searchString) end -- string.find
 function zo_plainstrfind     (subject, searchString) end -- PlainStringFind
---- @param string charToSplitAt
---- @param string subject
+--- @param charToSplitAt string
+--- @param subject string
 --- @return string ...
 function zo_strsplit         (charToSplitAt, subject) end -- SplitString
 function zo_loadstring       (subject) end -- LoadString
@@ -2595,7 +2597,7 @@ function ZO_SmoothCycleGenerator:Generate() end
 function ZO_SmoothCycleGenerator:GetValue(i) end
 
 -------------------------------------------------------------------------------
---- @class ZO_ListDialog
+--- @class ZO_PixelUnitControl
 ZO_PixelUnitControl = {}
 --- @return ZO_PixelUnitControl
 --- @param control Control
@@ -2771,41 +2773,6 @@ function ZO_RecentMessages:AddRecent(message) end
 function ZO_RecentMessages:IsRecent(message) end
 function ZO_RecentMessages:Update(timeNowMilliseconds) end
 function ZO_RecentMessages:ShouldDisplayMessage(message) end
-
--------------------------------------------------------------------------------
---- @class ZO_SavingEditBox
-ZO_SavingEditBox = {}
---- @return ZO_SavingEditBox
-function ZO_SavingEditBox:New(...) end
-function ZO_SavingEditBox:Initialize(control) end
-function ZO_SavingEditBox:SetDefaultText(defaultText) end
-function ZO_SavingEditBox:SetEmptyText(emptyText) end
-function ZO_SavingEditBox:SetEditing(editing, forceUpdate) end
-function ZO_SavingEditBox:IsEditing() end
-function ZO_SavingEditBox:SetShouldEscapeNonColorMarkup(shouldEscapeMarkup) end
-function ZO_SavingEditBox:SetEnabled(enabled) end
-function ZO_SavingEditBox:SetHidden(hidden) end
-function ZO_SavingEditBox:SetCustomTextValidator(validator) end
-function ZO_SavingEditBox:SetPutTextInQuotes(putTextInQuotes) end
-function ZO_SavingEditBox:GetText() end
-function ZO_SavingEditBox:SetText(text, dontSetResetText) end
-function ZO_SavingEditBox:GetControl() end
-function ZO_SavingEditBox:GetEditControl() end
-function ZO_SavingEditBox:ResetText() end
-function ZO_SavingEditBox:OnTextChanged() end
-function ZO_SavingEditBox:OnEnter() end
-function ZO_SavingEditBox:OnSaveClicked() end
-function ZO_SavingEditBox:Cancel() end
-function ZO_SavingEditBox:OnCancelClicked() end
-function ZO_SavingEditBox:OnModifyClicked() end
-function ZO_SavingEditBox:RefreshButtons() end
-
--------------------------------------------------------------------------------
---- @class ZO_SavingEditBoxGroup
-ZO_SavingEditBoxGroup = {}
---- @return ZO_SavingEditBoxGroup
-function ZO_SavingEditBoxGroup:New() end
-function ZO_SavingEditBoxGroup:Add(savingEditBox) end
 
 -------------------------------------------------------------------------------
 --- @class ZO_ScrollingSavingEditBox
@@ -4290,16 +4257,79 @@ function ZO_Options_OnMouseEnter(ctrl) end
 function ZO_Options_OnMouseExit(ctrl) end
 
 --- @alias SafeStringKey
---- | `SI_UNIT_NAME` = 165 "<<1>>"
+--- | `SI_ADDON_MANAGER_ADVANCED_UI_ERRORS` = 152 = "Advanced UI Errors"
+--- | `SI_ADDON_MANAGER_AUTHOR` = 149 = "Author"
+--- | `SI_ADDON_MANAGER_CHARACTER_SELECT_ALL` = 151 = "All Characters"
+--- | `SI_ADDON_MANAGER_CHARACTER_SELECT_LABEL` = 150 = "Configure for:"
+--- | `SI_ADDON_MANAGER_DEPENDENCIES` = 153 = "Required Add-Ons:"
+--- | `SI_ADDON_MANAGER_DEPENDENCY` = 154 = "Dependency"
+--- | `SI_ADDON_MANAGER_DEPENDENCY_DISABLED` = 162 = "<<1>> (Disabled)"
+--- | `SI_ADDON_MANAGER_DEPENDENCY_MISSING` = 161 = "<<1>> (Missing)"
+--- | `SI_ADDON_MANAGER_DEPENDENCY_TOO_LOW_VERSION` = 163 = "<<1>> (Newer Version Required)"
+--- | `SI_ADDON_MANAGER_ENABLED` = 147 = "Enabled"
+--- | `SI_ADDON_MANAGER_NAME` = 146 = "Name"
+--- | `SI_ADDON_MANAGER_NOTES` = 148 = "Notes"
+--- | `SI_ADDON_MANAGER_RELOAD` = 159 = "Reload UI"
+--- | `SI_ADDON_MANAGER_SECTION_LIBRARIES` = 145 = "Libraries"
+--- | `SI_ADDON_MANAGER_STATE_STRING` = 155 = "<<1>>, <<2>>"
+--- | `SI_ADDON_MANAGER_TOOLTIP_ENABLED_ALL` = 156 = "This add-on is enabled for all your characters."
+--- | `SI_ADDON_MANAGER_TOOLTIP_ENABLED_NONE` = 157 = "This add-on is not enabled for any of your characters."
+--- | `SI_ADDON_MANAGER_TOOLTIP_ENABLED_SOME` = 158 = "This add-on is enabled for some of your characters."
+--- | `SI_ADDON_MANAGER_VIEW_EULA` = 160 = "View EULA"
+--- | `SI_DIALOG_CANCEL` = 336 = "Cancel"
+--- | `SI_DIALOG_CLOSE` = 341 = "Close"
+--- | `SI_DIALOG_CONFIRM` = 340 = "Confirm"
+--- | `SI_INTERFACE_OPTIONS_RESET_TO_DEFAULT_TOOLTIP` = 6041 = "Reset to Default"
+--- | `SI_OPTIONS_RESET` = 359 = "Reset"
+--- | `SI_OPTIONS_RESET_ALL_PROMPT` = 358 = "Are you sure you want to reset all options panels to their default settings?"
+--- | `SI_OPTIONS_RESET_PROMPT = 357` = "Are you sure you want to reset this options panel to its default settings?"
+--- | `SI_OPTIONS_RESET_TITLE = 356` = "Reset to Defaults"
 --- | `SI_PLAYER_NAME` = 184 "<<1>>"
-SI_UNIT_NAME = 165 --= "<<1>>"
+--- | `SI_UNIT_NAME` = 165 "<<1>>"
+SI_ADDON_MANAGER_ADVANCED_UI_ERRORS = 152 = "Advanced UI Errors"
+SI_ADDON_MANAGER_AUTHOR = 149 = "Author"
+SI_ADDON_MANAGER_CHARACTER_SELECT_ALL = 151 = "All Characters"
+SI_ADDON_MANAGER_CHARACTER_SELECT_LABEL = 150 = "Configure for:"
+SI_ADDON_MANAGER_DEPENDENCIES = 153 = "Required Add-Ons:"
+SI_ADDON_MANAGER_DEPENDENCY = 154 = "Dependency"
+SI_ADDON_MANAGER_DEPENDENCY_DISABLED = 162 = "<<1>> (Disabled)"
+SI_ADDON_MANAGER_DEPENDENCY_MISSING = 161 = "<<1>> (Missing)"
+SI_ADDON_MANAGER_DEPENDENCY_TOO_LOW_VERSION = 163 = "<<1>> (Newer Version Required)"
+SI_ADDON_MANAGER_ENABLED = 147 = "Enabled"
+SI_ADDON_MANAGER_NAME = 146 = "Name"
+SI_ADDON_MANAGER_NOTES = 148 = "Notes"
+SI_ADDON_MANAGER_RELOAD = 159 = "Reload UI"
+SI_ADDON_MANAGER_SECTION_LIBRARIES = 145 = "Libraries"
+SI_ADDON_MANAGER_STATE_STRING = 155 = "<<1>>, <<2>>"
+SI_ADDON_MANAGER_TOOLTIP_ENABLED_ALL = 156 = "This add-on is enabled for all your characters."
+SI_ADDON_MANAGER_TOOLTIP_ENABLED_NONE = 157 = "This add-on is not enabled for any of your characters."
+SI_ADDON_MANAGER_TOOLTIP_ENABLED_SOME = 158 = "This add-on is enabled for some of your characters."
+SI_ADDON_MANAGER_VIEW_EULA = 160 = "View EULA"
+SI_DIALOG_CANCEL = 336 --= "Cancel"
+SI_DIALOG_CLOSE = 341 --= "Close"
+SI_DIALOG_CONFIRM = 340 --= "Confirm"
+SI_INTERFACE_OPTIONS_RESET_TO_DEFAULT_TOOLTIP = 6041 --= "Reset to Default"
+SI_OPTIONS_RESET = 359 --= "Reset"
+SI_OPTIONS_RESET_ALL_PROMPT = 358 --= "Are you sure you want to reset all options panels to their default settings?"
+SI_OPTIONS_RESET_PROMPT = 357 --= "Are you sure you want to reset this options panel to its default settings?"
+SI_OPTIONS_RESET_TITLE = 356 --= "Reset to Defaults"
 SI_PLAYER_NAME = 184 --= "<<1>>"
+SI_UNIT_NAME = 165 --= "<<1>>"
 
 --- @type WindowManager
 WINDOW_MANAGER = {}
-MAX_TEXT_CHAT_INPUT_CHARACTERS = 350
+--- @type ZO_ColorDef
+ZO_DEFAULT_DISABLED_COLOR = {a = 1,	b = 0.3, g = 0.3, r = 0.3}
+--- @type ZO_ColorDef
+ZO_DEFAULT_ENABLED_COLOR = {a = 1, b = 1, g = 1, r = 1}
+
+ESO_Dialogs = {}
 SLASH_COMMANDS = {}
-ZO_VALID_CURRENCY_TYPES = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+ZO_Ingame_SavedVariables = {}
+
+MAX_TEXT_CHAT_INPUT_CHARACTERS = 350
+
+ZO_VALID_CURRENCY_TYPES = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 ZO_VALID_LINK_TYPES_CHAT = {
 	ability = true
 	achievement = true
@@ -4310,8 +4340,3 @@ ZO_VALID_LINK_TYPES_CHAT = {
 	housing = true
 	item = true
 }
-
---- @type ZO_ColorDef
-ZO_DEFAULT_DISABLED_COLOR = {a = 1,	b = 0.3, g = 0.3, r = 0.3}
---- @type ZO_ColorDef
-ZO_DEFAULT_ENABLED_COLOR = {a = 1, b = 1, g = 1, r = 1}

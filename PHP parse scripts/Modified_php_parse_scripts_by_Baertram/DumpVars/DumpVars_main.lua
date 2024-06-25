@@ -26,32 +26,21 @@ local function DumpVarsNow()
 	                settings.constants[tostring(var2DumpStr)] = varDumped
                     cnt = cnt + 1
 	            end
-	        end
-		    d(">dumped " .. tostring(cnt) .. " constants & their values!")
+            end
+            d(">dumped " .. tostring(cnt) .. " constants & their values!")
+            return true
         else
-		    d(">no constants wer dumped!")
+            d(">no constants wer dumped!")
         end
     end
-
-    --Dump the sounds afterwards too
-	cnt = 0
-	d("[DumpVars - Dumping SOUNDS now]")
-	if SOUNDS ~= nil then
-        settings.sounds = {}
-    	for soundName, soundFile in pairs(SOUNDS) do
-        	settings.sounds[soundName] = soundFile
-            cnt = cnt + 1
-	    end
-        d(">dumped " .. tostring(cnt) .. " SOUNDS!")
-        Logout()
-    end
+	return false
 end
 
 local function command_handler(arg)
     arg = string.lower(arg)
-	if(arg == "") then
-    	DumpVarsNow()
-	end
+    if (DumpVarsNow() and arg == "logout") then
+        Logout()
+    end
 end
 
 --Register the slash commands
@@ -59,6 +48,7 @@ local function RegisterSlashCommands()
     -- Register slash commands
 	SLASH_COMMANDS["/dumpvars"] = command_handler
 	SLASH_COMMANDS["/dv"] 		= command_handler
+	SLASH_COMMANDS["/dvl"]      = command_handler
 end
 
 local function DumpVars_Loaded(eventCode, addOnName)

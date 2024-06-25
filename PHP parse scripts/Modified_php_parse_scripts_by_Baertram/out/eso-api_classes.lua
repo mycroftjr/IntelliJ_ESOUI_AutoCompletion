@@ -1846,9 +1846,9 @@ function Control:SetAlpha(alpha) end --*protected-attributes*
 --- @param point AnchorPosition
 --- @param relativeTo Control
 --- @param relativePoint AnchorPosition
---- @param offsetX layout_measurement
---- @param offsetY layout_measurement
---- @param anchorConstrains AnchorConstrains
+--- @param offsetX layout_measurement|nil
+--- @param offsetY layout_measurement|nil
+--- @param anchorConstrains AnchorConstrains|nil
 --- @return void
 function Control:SetAnchor(point, relativeTo, relativePoint, offsetX, offsetY, anchorConstrains) end --*protected-attributes*
 
@@ -2003,9 +2003,9 @@ function Control:SetGaussianBlur(kernelSize, factor) end
 
 --- @param handlerName string
 --- @param functionRef function
---- @param name string
---- @param controlHandlerOrder ControlHandlerOrder
---- @param targetName string
+--- @param name string|nil
+--- @param controlHandlerOrder ControlHandlerOrder|nil
+--- @param targetName string|nil
 --- @return void
 function Control:SetHandler(handlerName, functionRef, name, controlHandlerOrder, targetName) end
 
