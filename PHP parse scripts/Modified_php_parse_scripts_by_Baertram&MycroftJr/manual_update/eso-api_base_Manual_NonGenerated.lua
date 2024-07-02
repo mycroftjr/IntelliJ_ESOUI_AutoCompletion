@@ -1189,7 +1189,7 @@ function CreateSimpleAnimation(animationType, controlToAnimate, delay) end
 
 -------------------------------------------------------------------------------
 --[Localization]
---- @param formatString SafeStringKey
+--- @param formatString string|SafeStringKey
 --- @return string
 function zo_strformat(formatString, ...) end
 function ZO_SetCachedStrFormatterOnlyStoreOne(formatter) end
