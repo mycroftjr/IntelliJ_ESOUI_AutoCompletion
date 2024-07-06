@@ -169,13 +169,13 @@ ZO_SECOND_CONTRAST_TEXT = {
 ZO_VALID_CURRENCY_TYPES = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 ZO_VALID_LINK_TYPES_CHAT = {
 	["guild"] = true,
-	["item"] = true,
 	["achievement"] = true,
-	["collectible"] = true,
-	["help"] = true,
+	["item"] = true,
 	["crafted_ability"] = true,
+	["housing"] = true,
+	["collectible"] = true,
 	["ability"] = true,
-	["housing"] = true
+	["help"] = true
 }
 --- @type ZO_ColorDef
 ZO_WHITE = {

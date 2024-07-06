@@ -219,14 +219,7 @@ WindowObjectPool = {}
 --- @return table<integer, Window>
 function WindowObjectPool:GetActiveObjects() end
 
---- @class Chat
---- @field windowPool WindowObjectPool
---- @field primaryContainer ChatContainer
-CHAT_SYSTEM = KEYBOARD_CHAT_SYSTEM
-
-
-function StartChatInput(chatText, CHAT_CHANNEL_CONSTANT, targetName) end
-
+-------------------------------------------------------------------------------
 --- @class ChatContainer
 ChatContainer = {}
 --- @return ChatContainer
@@ -250,44 +243,144 @@ function ChatContainer:UpdateOverflowArrow() end
 SharedChatContainer = {}
 function SharedChatContainer:ShowContextMenu(tabIndex) end
 
---- @class ZO_ChatSystem
---- @field windowPool WindowObjectPool
+-------------------------------------------------------------------------------
+--- @class SharedChatSystem: ZO_Object
 --- @field primaryContainer ChatContainer
+--- @field windowPool WindowObjectPool
+SharedChatSystem = {}
+--- @type SharedChatSystem
+CHAT_SYSTEM = nil
+--- @return SharedChatSystem
+function SharedChatSystem:New(...) end
+function SharedChatSystem:Initialize(control, platformSettings) end
+function SharedChatSystem:InitializeSharedControlManagement(control, newContainerFn, chatWindowTemplateName, chatWindowTabName) end
+function SharedChatSystem:InitializeEventManagement() end
+function SharedChatSystem:InitializeSharedEvents(eventKey) end
+function SharedChatSystem:TryNotificationAndMailBursts() end
+function SharedChatSystem:LoadChatFromSettings(newContainerFn, defaults) end
+function SharedChatSystem:SetupSavedVars(defaults) end
+function SharedChatSystem:RedockContainersToPrimary() end
+function SharedChatSystem:CanSaveSettings() end
+function SharedChatSystem:SaveLocalContainerSettings(container, containerControl) end
+function SharedChatSystem:AcquireInsertIndicator(container) end
+function SharedChatSystem:ReleaseInsertIndicator(container) end
+function SharedChatSystem:RegisterForCategory(container, category) end
+function SharedChatSystem:StartNewChatNotification() end
+function SharedChatSystem:UnregisterFromCategory(container, category) end
+function SharedChatSystem:HandleNewTargetOnChannel(targetChannel, target) end
+function SharedChatSystem:OnFormattedChatMessage(message, category, targetChannel, fromDisplayName, rawMessageText, narrationMessage, overrideColorDef) end
+function SharedChatSystem:UpdateContainerIndices(start) end
+function SharedChatSystem:DestroyContainer(container) end
+function SharedChatSystem:RemoveSavedContainer(container) end
+function SharedChatSystem:TransferWindow(window, previousContainer, targetContainer) end
+function SharedChatSystem:OnRawWindowCreated(container, name, isCombatLog) end
+function SharedChatSystem:OnRawWindowDestroyed(container, tabIndex) end
+function SharedChatSystem:AddCombatLog(name) end
+function SharedChatSystem:SetCombatLogObject(combatLogObject) end
+function SharedChatSystem:PrepareContainersTabDrop(initiator, controlToMonitor) end
+function SharedChatSystem:StopContainersTabDrop(initiator) end
+function SharedChatSystem:SetAllowMultipleContainers(allow) end
+function SharedChatSystem:MultipleContainersAllowed() end
+--- @param container ChatContainer|nil
+--- @return SharedChatContainer
+function SharedChatSystem:CreateChatContainer(container) end
+function SharedChatSystem:ResetContainerPositionAndSize(container) end
+function SharedChatSystem:HandleTryInsertLink(link) end
+function SharedChatSystem:IsTextEntryOpen() end
+function SharedChatSystem:ValidateChatChannel() end
+function SharedChatSystem:SubmitTextEntry() end --*private*
+function SharedChatSystem:CloseTextEntry(keepText) end
+function SharedChatSystem:OnAutoCompleteEntrySelected(target) end
+function SharedChatSystem:ValidateTargetName(name) end
+--- @param switch SwitchData
+--- @param text string
+--- @param firstSpaceStart integer
+--- @param inferTargetEnd boolean
+--- @return boolean isValid, string|nil switchArg, boolean|nil deferredError, integer|nil finalSpace
+function SharedChatSystem:ValidateSwitch(switch, text, firstSpaceStart, inferTargetEnd) end
+--- @param text string
+--- @param inferTargetEnd boolean
+--- @return SwitchData switch, boolean isValidSwitch, string|nil switchArg, boolean|nil deferredError, integer|nil spaceStart
+function SharedChatSystem:TextToSwitchData(text, inferTargetEnd) end
+function SharedChatSystem:OnTextEntryChanged(newText) end
+function SharedChatSystem:FindNextTargetForCurrentChannel() end
+function SharedChatSystem:FindPreviousTargetForCurrentChannel() end
+function SharedChatSystem:ShouldTextEntryBeBlocked() end
+function SharedChatSystem:StartTextEntry(text, channel, target, dontShowHUDWindow) end
+function SharedChatSystem:AutoSendTextEntry(text, channel, target, dontShowHUDWindow) end --*private*
+function SharedChatSystem:ReplyToLastTarget(channelType) end
+function SharedChatSystem:SetChannelInternal(newChannel, channelTarget) end
+function SharedChatSystem:SetChannel(newChannel, channelTarget) end
+function SharedChatSystem:GetCurrentChannelData() end
+function SharedChatSystem:SetContainerExtents(minWidth, maxWidth, minHeight, maxHeight) end
+function SharedChatSystem:UpdateTextEntryChannel() end
+function SharedChatSystem:AddCommandPrefix(prefixCharacter, callback) end
+function SharedChatSystem:ShowPlayerContextMenu(playerName, rawName) end
+function SharedChatSystem:OnLinkClicked(link, button, text, color, linkType, ...) end
+function SharedChatSystem:CreateNewChatTab(container) end
+function SharedChatSystem:SetTextEntryFont(font) end
+function SharedChatSystem:OnChatCategoryColorChanged(categoryId, red, green, blue) end
+function SharedChatSystem:SetFontSize(fontSize) end
+function SharedChatSystem:ResetFontSizeToDefault() end
+function SharedChatSystem:SetMinAlpha(minAlpha) end
+function SharedChatSystem:GetMinAlpha() end
+function SharedChatSystem:ResetMinAlphaToDefault() end
+function SharedChatSystem:ShowTextEntryMenu() end
+function SharedChatSystem:IsAutoCompleteOpen() end
+function SharedChatSystem:CloseAutoComplete() end
+--- @return EditControl
+function SharedChatSystem:GetEditControl() end
+function SharedChatSystem:HasUnreadMail() end
+function SharedChatSystem:OnNumUnreadMailChanged(numUnread) end
+function SharedChatSystem:OnAgentChatUpdated() end
+function SharedChatSystem:GetTextEntryFontString(fontSize) end
+function SharedChatSystem:OnPlayerActivated() end
+function SharedChatSystem:OnAgentChatActiveChanged() end
+function SharedChatSystem:OnNumOnlineFriendsChanged() end
+function SharedChatSystem:Minimize() end
+function SharedChatSystem:Maximize() end
+function SharedChatSystem:IsMinimized() end
+function SharedChatSystem:SetupFonts() end
+function SharedChatSystem:GetFont() end
+function SharedChatSystem:GetFontSizeString() end
+function SharedChatSystem:GetFontSizeFromSetting() end
+function SharedChatSystem:ShouldOnlyShowOnHUD() end
+function SharedChatSystem:IsHidden() end
+function SharedChatSystem:RefreshVisibility() end
+function SharedChatSystem:ResetChat() end
+
+--- @return SharedChatSystem
+function ZO_GetChatSystem() end
+--- @param channel ChannelType|nil
+function StartChatInput(text, channel, target) end
+function AutoSendChatInput(text, channel, target, dontShowHUDWindow) end --*private*
+function ChatReplyToLastWhisper() end
+
+
+--- @class ZO_ChatSystem: SharedChatSystem
 ZO_ChatSystem = {}
-KEYBOARD_CHAT_SYSTEM = ZO_GetChatSystem()
-CHAT_SYSTEM = KEYBOARD_CHAT_SYSTEM
+--- @type ZO_ChatSystem
+KEYBOARD_CHAT_SYSTEM = nil
 --- @return ZO_ChatSystem
 function ZO_ChatSystem:New(...) end
 function ZO_ChatSystem:Initialize(control) end
 function ZO_ChatSystem:LoadChatFromSettings() end
-function ZO_ChatSystem:SetupSavedVars(defaults) end
-function ZO_ChatSystem:SaveLocalContainerSettings(container, containerControl) end
 function ZO_ChatSystem:InitializeSharedControlManagement(control) end
-function ZO_ChatSystem:TryNotificationAndMailBursts() end
-function ZO_ChatSystem:ResetContainerPositionAndSize(container) end
-function ZO_ChatSystem:RemoveSavedContainer(container) end
 function ZO_ChatSystem:SetupNotifications(numNotifications) end
 function ZO_ChatSystem:OnNumNotificationsChanged(numNotifications) end
-function ZO_ChatSystem:OnNumUnreadMailChanged(numUnread) end
 function ZO_ChatSystem:SetNumOnlineFriends(numOnline) end
-function ZO_ChatSystem:InitializeEventManagement() end
 function ZO_ChatSystem:ShowMinBar() end
 function ZO_ChatSystem:HideMinBar() end
-function ZO_ChatSystem:Minimize() end
-function ZO_ChatSystem:Maximize() end
-function ZO_ChatSystem:GetFont() end
 function ZO_ChatSystem:GetFontSizeString(fontSize) end
-function ZO_ChatSystem:GetFontSizeFromSetting() end
-function ZO_ChatSystem:ShouldOnlyShowOnHUD() end
-function ZO_ChatSystem:IsHidden() end
-function ZO_ChatSystem:OnAgentChatActiveChanged() end
-function ZO_ChatSystem:OnPlayerActivated() end
 
-function ZO_ChatSystem_DoesPlatformUseGamepadChatSystem()  end
-function ZO_ChatSystem_DoesPlatformUseKeyboardChatSystem()  end
+function ZO_ChatSystem_CancelChat() end
+function ZO_ChatSystem_DoesPlatformUseGamepadChatSystem() end
+function ZO_ChatSystem_DoesPlatformUseKeyboardChatSystem() end
+function ZO_ChatSystem_ExitChat() end
 function ZO_ChatSystem_GetCategoryColorFromChannel(channelId) end
---- @return table
+--- @return table<ChannelType, ChannelInfo>
 function ZO_ChatSystem_GetChannelInfo() end
+--- @return table<string|ChannelType, SwitchData>
 function ZO_ChatSystem_GetChannelSwitchLookupTable() end
 --- @return table<Event, table<ChannelType, ChatChannelCategories>>, table<Event, ChatChannelCategories>
 function ZO_ChatSystem_GetEventCategoryMappings() end
@@ -295,6 +388,8 @@ function ZO_ChatSystem_GetTrialEventMappings() end
 function ZO_ChatSystem_OnAgentChatClicked() end
 function ZO_ChatSystem_OnAgentChatEnter(control) end
 function ZO_ChatSystem_OnAgentChatExit(control) end
+function ZO_ChatSystem_OnDragStart(control) end
+function ZO_ChatSystem_OnDragStop(control) end
 function ZO_ChatSystem_OnFriendsClicked(control) end
 function ZO_ChatSystem_OnFriendsEnter(control) end
 function ZO_ChatSystem_OnFriendsExit(control) end
@@ -303,16 +398,43 @@ function ZO_ChatSystem_OnMailClicked(control) end
 function ZO_ChatSystem_OnMailEnter(control) end
 function ZO_ChatSystem_OnMailExit(control) end
 function ZO_ChatSystem_OnMinMaxClicked() end
+function ZO_ChatSystem_OnMouseEnter(control) end
+function ZO_ChatSystem_OnMouseWheel(control, delta, ctrl, alt, shift) end
+function ZO_ChatSystem_OnMoveStop(control) end
 function ZO_ChatSystem_OnNotificationsClicked(control) end
 function ZO_ChatSystem_OnNotificationsEnter(control) end
 function ZO_ChatSystem_OnNotificationsExit(control) end
+function ZO_ChatSystem_OnResizeStart(control) end
+function ZO_ChatSystem_OnResizeStop(control) end
+function ZO_ChatSystem_ScrollByOffset(control, offset) end
+function ZO_ChatSystem_ScrollToBottom(control) end
+function ZO_ChatSystem_SetScroll(control, value) end
 function ZO_ChatSystem_ShouldUseKeyboardChatSystem() end
 function ZO_ChatSystem_ShowOptions(control) end
-function ZO_GetChatSystem() end
+function ZO_ChatSystem_SubmitChat() end --*private*
 
-function StartChatInput(chatText, CHAT_CHANNEL_CONSTANT, targetName) end
+--- @class ChannelInfo
+--- @field format SafeStringKey
+--- @field name string|nil
+--- @field playerLinkable boolean
+--- @field channelLinkable boolean
+--- @field supportCSIcon boolean|nil
+--- @field switches string|nil
+--- @field requires fun()|nil
+--- @field requirementErrorMessage nil|string|fun(): string
+--- @field deferRequirement boolean|nil
+--- @field target boolean|nil
+--- @field saveTarget ChannelType|nil
+--- @field targetSwitches string|nil
+--- @field narrationFormat SafeStringKey|nil
+--- @field formatMessage boolean|nil
+--- @field dynamicName boolean|nil
+
+--- @class SwitchData: ChannelInfo
+--- @field id ChannelType
+
+-------------------------------------------------------------------------------
 function ZO_ChatWindow_OpenContextMenu(control)end
-
 
 --- @class ZO_ChatRouter
 ZO_ChatRouter = {}
